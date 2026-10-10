@@ -15,16 +15,20 @@ from app.components.summary_view import render_document_overview, render_summary
 from app.components.ui_elements import (
     inject_seo_metadata,
     render_approval_gate_banner,
+    render_badge,
     render_citation_panel,
     render_empty_state,
     render_page_header,
     render_public_landing_view,
+    render_section_heading,
     render_stat_card,
 )
 from app.components.upload import render_upload_component
 from app.components.workspace_view import render_workspace_view
 
 __all__ = [
+    "inject_seo_metadata",
+    "render_public_landing_view",
     "render_upload_component",
     "render_document_overview",
     "render_summary_view",
@@ -46,6 +50,6 @@ __all__ = [
     "render_empty_state",
     "render_citation_panel",
     "render_approval_gate_banner",
-    "inject_seo_metadata",
-    "render_public_landing_view",
+    "render_section_heading",
+    "render_badge",
 ]

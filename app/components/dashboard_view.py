@@ -1,12 +1,11 @@
-"""ResearchLens Dashboard View (Phase 4 & Phase 17).
+"""ResearchLens Dashboard View (Phase 4).
 
 Renders a high-level research intelligence overview using real workspace models:
-- Mode toggle: Public Product Tour & Capabilities vs. Authenticated Workspace Operations
 - Active research project statistics (papers, hypotheses, plans, runs, findings)
 - Subsystem health diagnostics (storage, compute, docker, mlflow)
 - Recent research papers in active workspace
 - Activity stream from real workspace events
-- Strict anti-indexing and SEO privacy controls
+- Quick-launch scientific action shortcuts
 """
 
 from typing import Optional
@@ -14,10 +13,8 @@ from typing import Optional
 import streamlit as st
 
 from app.components.ui_elements import (
-    inject_seo_metadata,
     render_empty_state,
     render_page_header,
-    render_public_landing_view,
     render_stat_card,
 )
 from researchlens.health import check_system_health
@@ -33,22 +30,6 @@ def render_dashboard_view(store: Optional[WorkspaceStore] = None) -> None:
     current_ws = None
     ws_id = None
 
-    # Top View Mode Switcher
-    view_mode = st.radio(
-        "Overview Mode",
-        ["🔬 Active Workspace Operations", "🌟 Public Platform Overview & Tour"],
-        index=0 if workspaces else 1,
-        horizontal=True,
-        key="dash_view_mode_radio",
-    )
-
-    if view_mode == "🌟 Public Platform Overview & Tour":
-        render_public_landing_view(store=store)
-        return
-
-    # In Workspace Operations mode: enforce strict privacy noindex
-    inject_seo_metadata(page_type="workspace", title_suffix="Workspace Operations")
-
     if workspaces:
         ws_map = {f"{w.name} ({w.workspace_id[:8]})": w for w in workspaces}
         selected_label = st.selectbox(
@@ -61,7 +42,7 @@ def render_dashboard_view(store: Optional[WorkspaceStore] = None) -> None:
         ws_id = current_ws.workspace_id
 
     render_page_header(
-        title="Research Overview & Operations",
+        title="Research Overview",
         subtitle="Executive scientific summary, real-time workspace metrics, and system diagnostics.",
         workspace_context=current_ws.name if current_ws else "No Workspace Active",
         badge_label="PLATFORM READY",
@@ -104,13 +85,13 @@ def render_dashboard_view(store: Optional[WorkspaceStore] = None) -> None:
     # 4-Column Metric Grid
     col1, col2, col3, col4 = st.columns(4)
     with col1:
-        render_stat_card("Ingested Papers", str(len(papers)), subtext=f"{len(collections)} Collections")
+        render_stat_card("Ingested Papers", str(len(papers)), subtext=f"{len(collections)} Collections", icon="📚", variant="indigo")
     with col2:
-        render_stat_card("Active Hypotheses", str(len(hypotheses)), subtext="Literature Grounded")
+        render_stat_card("Active Hypotheses", str(len(hypotheses)), subtext="Literature Grounded", icon="💡", variant="cyan")
     with col3:
-        render_stat_card("Experiment Plans", str(len(plans)), subtext=f"{len(runs)} Total Runs")
+        render_stat_card("Experiment Plans", str(len(plans)), subtext=f"{len(runs)} Total Runs", icon="🧪", variant="purple")
     with col4:
-        render_stat_card("Findings In Review", str(len(unreviewed_findings)), subtext=f"{len(findings)} Formalized")
+        render_stat_card("Findings In Review", str(len(unreviewed_findings)), subtext=f"{len(findings)} Total Formalized", icon="🛡️", variant="emerald")
 
     st.markdown("---")
 
@@ -133,18 +114,18 @@ def render_dashboard_view(store: Optional[WorkspaceStore] = None) -> None:
     col_left, col_right = st.columns([3, 2])
 
     with col_left:
-        st.markdown("### 📚 Ingested Papers in Active Workspace")
+        st.markdown("### 📚 Recent Research Papers")
         if papers:
             for p in papers[:5]:
-                authors_display = p.authors if p.authors and p.authors != "Not detected" else "Authors: Academic Consortium"
+                authors_str = p.authors if p.authors and p.authors != "Not detected" else "Authors unlisted"
                 st.markdown(
                     f"""
                     <div class="lens-card">
                         <div class="lens-card-header">
-                            <strong style="color: #F8FAFC; font-size: 0.95rem;">{p.title}</strong>
+                            <strong style="color: #F8FAFC; font-size: 0.98rem; font-family: 'Space Grotesk', sans-serif;">📄 {p.title}</strong>
                             <span class="lens-badge badge-info">{p.year or 'Year N/A'}</span>
                         </div>
-                        <p style="margin: 0; font-size: 0.85rem; color: #94A3B8;">{authors_display}</p>
+                        <p style="margin: 0; font-size: 0.86rem; color: #94A3B8;">✍️ {authors_str}</p>
                     </div>
                     """,
                     unsafe_allow_html=True,
@@ -152,21 +133,23 @@ def render_dashboard_view(store: Optional[WorkspaceStore] = None) -> None:
         else:
             render_empty_state(
                 title="No Papers Saved Yet",
-                description="Upload and analyze research papers in the 'Paper Analysis & Intelligence' tab to save them to this workspace.",
+                description="Upload and analyze research papers in the 'Paper Analysis & Intelligence' tab to index them in this workspace.",
                 icon="📄",
             )
 
     with col_right:
-        st.markdown("### 🕒 Recent Activity Stream")
+        st.markdown("### 🕒 Real-Time Activity Stream")
         activities = store.list_activity(ws_id)
         if activities:
             for act in activities[:8]:
                 timestamp_str = act.timestamp[:19].replace("T", " ") if getattr(act, "timestamp", None) else ""
                 st.markdown(
                     f"""
-                    <div style="border-left: 2px solid #14B8A6; padding-left: 12px; margin-bottom: 12px;">
+                    <div style="position: relative; border-left: 2px solid #6366F1; padding-left: 14px; margin-bottom: 12px;">
                         <div style="font-size: 0.88rem; color: #F8FAFC; font-weight: 500;">{act.summary}</div>
-                        <div style="font-size: 0.78rem; color: #64748B;">{act.action} · {timestamp_str}</div>
+                        <div style="font-size: 0.78rem; color: #64748B; font-family: 'JetBrains Mono', monospace; margin-top: 2px;">
+                            <span style="color: #38BDF8;">{act.action}</span> · {timestamp_str}
+                        </div>
                     </div>
                     """,
                     unsafe_allow_html=True,

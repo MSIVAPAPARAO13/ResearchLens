@@ -87,7 +87,22 @@ def render_qa_view(
             key="qa_question_input",
         )
 
-    submit_button = st.button("🔍 Search & Synthesize Answer", type="primary", use_container_width=False)
+    # Quick Suggestion Chips
+    st.markdown(
+        """
+        <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-top: -6px; margin-bottom: 12px;">
+            <span style="font-size: 0.78rem; color: #64748B; align-self: center;">Suggested:</span>
+            <span class="lens-tag">Architecture</span>
+            <span class="lens-tag">Datasets</span>
+            <span class="lens-tag">Baselines</span>
+            <span class="lens-tag">Limitations</span>
+            <span class="lens-tag">Key Metrics</span>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    submit_button = st.button("🔍 Search & Synthesize Answer", type="primary")
 
     if submit_button or (question_text and question_text != st.session_state.get("last_answered_q")):
         if not question_text.strip():
@@ -119,21 +134,29 @@ def render_qa_view(
 
         # Answer container
         is_refusal = "could not find enough evidence" in res.answer.lower()
-        border_color = "#EF4444" if is_refusal else "#10B981"
-        bg_color = "rgba(239, 68, 68, 0.08)" if is_refusal else "rgba(16, 185, 129, 0.08)"
-        status_tag = '<span class="lens-badge badge-danger">INSUFFICIENT EVIDENCE REFUSAL</span>' if is_refusal else '<span class="lens-badge badge-success">GROUNDED IN EVIDENCE</span>'
+        border_color = "var(--lens-status-danger)" if is_refusal else "var(--lens-status-success)"
+        bg_gradient = (
+            "linear-gradient(135deg, rgba(244, 63, 94, 0.1) 0%, rgba(15, 23, 42, 0.7) 100%)"
+            if is_refusal
+            else "linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(15, 23, 42, 0.7) 100%)"
+        )
+        status_tag = (
+            '<span class="lens-badge badge-danger">INSUFFICIENT EVIDENCE REFUSAL</span>'
+            if is_refusal
+            else '<span class="lens-badge badge-success">GROUNDED IN EVIDENCE</span>'
+        )
 
         st.markdown(
             f"""
-            <div style="background: {bg_color}; border-left: 4px solid {border_color}; border-top: 1px solid rgba(255,255,255,0.06); border-right: 1px solid rgba(255,255,255,0.06); border-bottom: 1px solid rgba(255,255,255,0.06); padding: 18px 20px; border-radius: 8px; margin: 16px 0;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                    <strong style="font-size: 1.05rem; color: #F8FAFC;">Synthesized Answer:</strong>
+            <div style="background: {bg_gradient}; backdrop-filter: blur(14px); border-left: 4px solid {border_color}; border-top: 1px solid var(--lens-border-subtle); border-right: 1px solid var(--lens-border-subtle); border-bottom: 1px solid var(--lens-border-subtle); padding: 20px 24px; border-radius: var(--lens-radius-md); margin: 18px 0; box-shadow: var(--lens-shadow-md);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <strong style="font-size: 1.1rem; color: #F8FAFC; font-family: 'Space Grotesk', sans-serif;">Synthesized Answer</strong>
                     <div style="display: flex; gap: 8px; align-items: center;">
                         {status_tag}
                         <span class="lens-badge badge-neutral">{last_strat}</span>
                     </div>
                 </div>
-                <p style="margin: 6px 0 0 0; font-size: 1rem; line-height: 1.6; color: #F1F5F9;">{res.answer}</p>
+                <p style="margin: 6px 0 0 0; font-size: 1.02rem; line-height: 1.65; color: #F1F5F9;">{res.answer}</p>
             </div>
             """,
             unsafe_allow_html=True,

@@ -21,15 +21,15 @@ def render_document_overview(doc: Document, sections: Dict[str, str]) -> None:
 
     col1, col2, col3, col4 = st.columns(4)
     with col1:
-        render_stat_card("Total Pages", str(doc.page_count), subtext="Full Document")
+        render_stat_card("Total Pages", str(doc.page_count), subtext="Full Document", icon="📄", variant="indigo")
     with col2:
-        render_stat_card("Word Count", f"{doc.word_count:,}", subtext="Cleaned Text")
+        render_stat_card("Word Count", f"{doc.word_count:,}", subtext="Cleaned Text", icon="📝", variant="cyan")
     with col3:
-        render_stat_card("Detected Sections", str(len(sections)), subtext="Structural Boundary")
+        render_stat_card("Detected Sections", str(len(sections)), subtext="Structural Boundary", icon="📑", variant="purple")
     with col4:
         size_kb = doc.metadata.file_size_bytes / 1024
         size_str = f"{size_kb / 1024:.2f} MB" if size_kb > 1024 else f"{size_kb:.1f} KB"
-        render_stat_card("File Size", size_str, subtext="PDF Payload")
+        render_stat_card("File Size", size_str, subtext="PDF Payload", icon="💾", variant="emerald")
 
 
 def render_summary_view(
@@ -44,10 +44,13 @@ def render_summary_view(
         st.markdown(
             f"""
             <div class="tldr-card">
-                <div style="font-weight: 700; color: #38BDF8; font-size: 0.85rem; letter-spacing: 0.05em; margin-bottom: 6px;">
-                    ⚡ TL;DR (ONE-SENTENCE SYNTHESIS)
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <span style="font-weight: 700; color: #38BDF8; font-size: 0.85rem; letter-spacing: 0.05em; font-family: 'Space Grotesk', sans-serif;">
+                        ⚡ TL;DR (ONE-SENTENCE SYNTHESIS)
+                    </span>
+                    <span class="lens-badge badge-info">CONDENSED</span>
                 </div>
-                <div style="color: #F8FAFC;">{tldr}</div>
+                <div style="color: #F8FAFC; font-size: 1.02rem; line-height: 1.6;">{tldr}</div>
             </div>
             """,
             unsafe_allow_html=True,
@@ -57,10 +60,13 @@ def render_summary_view(
         st.markdown(
             f"""
             <div class="exec-card">
-                <div style="font-weight: 700; color: #34D399; font-size: 0.85rem; letter-spacing: 0.05em; margin-bottom: 6px;">
-                    🎯 EXECUTIVE SUMMARY
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <span style="font-weight: 700; color: #34D399; font-size: 0.85rem; letter-spacing: 0.05em; font-family: 'Space Grotesk', sans-serif;">
+                        🎯 EXECUTIVE SUMMARY
+                    </span>
+                    <span class="lens-badge badge-success">PEER COMPREHENSIVE</span>
                 </div>
-                <div style="color: #F8FAFC;">{executive_summary}</div>
+                <div style="color: #F8FAFC; font-size: 1.02rem; line-height: 1.65;">{executive_summary}</div>
             </div>
             """,
             unsafe_allow_html=True,

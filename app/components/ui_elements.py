@@ -1,11 +1,11 @@
 """Reusable UI elements and styled components for ResearchLens.
 
 Provides standardized scientific presentation widgets:
-- Page headers with context badges
-- Stat and metric cards
-- Provenance citation panels
-- Empty and loading states
-- Status badges and editorial callouts
+- Page headers with context badges and live status indicators
+- Stat and metric cards with luminous accents and icons
+- Provenance citation panels with quote glyphs and confidence pills
+- Empty and loading states with radial glow
+- Status badges, editorial callouts, and section headings
 - Public product landing page & capability tour
 - SEO metadata and strict anti-indexing privacy controls
 """
@@ -108,7 +108,11 @@ def render_page_header(
     """Render a unified scientific page header banner."""
     context_html = ""
     if workspace_context:
-        context_html += f'<span class="lens-context-badge">📁 {workspace_context}</span>'
+        context_html += (
+            f'<span class="lens-context-badge">'
+            f'<span class="lens-live-dot"></span> 📁 {workspace_context}'
+            f'</span>'
+        )
     if badge_label:
         context_html += f'<span class="lens-badge badge-{badge_variant}">{badge_label}</span>'
 
@@ -117,7 +121,7 @@ def render_page_header(
         <div class="lens-header">
             <div class="lens-header-top">
                 <h1 class="lens-title">{title}</h1>
-                <div>{context_html}</div>
+                <div style="display: flex; align-items: center; gap: 8px;">{context_html}</div>
             </div>
             <p class="lens-subtitle">{subtitle}</p>
         </div>
@@ -130,13 +134,32 @@ def render_stat_card(
     label: str,
     number: str,
     subtext: Optional[str] = None,
+    icon: Optional[str] = None,
+    variant: str = "default",
 ) -> None:
-    """Render an editorial stat metric card."""
+    """Render an editorial stat metric card with optional icon and variant accents."""
     sub_html = f'<div class="lens-stat-sub">{subtext}</div>' if subtext else ""
+    icon_html = (
+        f'<div style="font-size: 1.25rem; background: rgba(255,255,255,0.06); width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08);">{icon}</div>'
+        if icon
+        else ""
+    )
+
+    top_row = (
+        f"""
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px;">
+            <div class="lens-stat-label">{label}</div>
+            {icon_html}
+        </div>
+        """
+        if icon
+        else f'<div class="lens-stat-label">{label}</div>'
+    )
+
     st.markdown(
         f"""
-        <div class="lens-stat-box">
-            <div class="lens-stat-label">{label}</div>
+        <div class="lens-stat-box lens-stat-{variant}">
+            {top_row}
             <div class="lens-stat-number">{number}</div>
             {sub_html}
         </div>
@@ -150,7 +173,7 @@ def render_empty_state(
     description: str,
     icon: str = "🔬",
 ) -> None:
-    """Render an informative scientific empty state."""
+    """Render an informative scientific empty state with radial glow."""
     st.markdown(
         f"""
         <div class="lens-empty-state">
@@ -171,21 +194,28 @@ def render_citation_panel(
     label: Optional[str] = None,
     chunk_id: Optional[str] = None,
 ) -> None:
-    """Render a strict evidence citation panel with provenance indicators."""
+    """Render a strict evidence citation panel with provenance indicators and quote glyphs."""
     page_str = f"Page {page_number}" if page_number is not None else "Page N/A"
     sec_str = section_name.upper() if section_name else "GENERAL"
     chunk_str = f" · ID: {chunk_id[:8]}" if chunk_id else ""
-    conf_str = f" · Conf: {confidence:.0%}" if confidence is not None and confidence > 0 else ""
-    meta_info = f"📍 {page_str} · {sec_str}{chunk_str}{conf_str}"
 
-    label_html = f'<strong style="color: #F8FAFC;">{label}</strong>' if label else ""
+    conf_badge = ""
+    if confidence is not None and confidence > 0:
+        variant = "success" if confidence >= 0.75 else ("info" if confidence >= 0.5 else "warning")
+        conf_badge = f'<span class="lens-badge badge-{variant}">Conf: {confidence:.0%}</span>'
+
+    meta_info = f"📍 {page_str} · {sec_str}{chunk_str}"
+    label_html = f'<strong style="color: #F8FAFC; font-size: 0.95rem;">{label}</strong>' if label else ""
 
     st.markdown(
         f"""
         <div class="lens-citation-panel">
             <div class="lens-citation-header">
-                {label_html}
-                <span class="lens-citation-badge">{meta_info}</span>
+                <div>{label_html}</div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <span class="lens-citation-badge">{meta_info}</span>
+                    {conf_badge}
+                </div>
             </div>
             <p class="lens-citation-quote">"{source_text}"</p>
         </div>
@@ -208,23 +238,53 @@ def render_approval_gate_banner(
     elif approval_status in ("REJECTED", "BLOCKED"):
         status_badge = f'<span class="lens-badge badge-danger">{approval_status}</span>'
 
-    approver_info = f"<br><small>Authorized by: <strong>{approved_by}</strong> at {timestamp}</small>" if approved_by else ""
+    approver_info = (
+        f"<br><small style='color: #94A3B8;'>Authorized by: <strong style='color: #F8FAFC;'>{approved_by}</strong> at {timestamp}</small>"
+        if approved_by
+        else ""
+    )
 
     st.markdown(
         f"""
         <div class="approval-gate-banner">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-                <strong>🛡️ Human Researcher Approval Gate: {stage_name}</strong>
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+                <strong style="color: #FBBF24; font-size: 1rem; display: flex; align-items: center; gap: 8px;">
+                    🛡️ Human Researcher Approval Gate: {stage_name}
+                </strong>
                 {status_badge}
             </div>
-            <p style="margin: 6px 0 0 0; font-size: 0.9rem; color: #CBD5E1;">
+            <p style="margin: 8px 0 0 0; font-size: 0.92rem; color: #CBD5E1; line-height: 1.5;">
                 Strict scientific integrity requires explicit authorization before compute execution.
-                Required Role: <code>{required_role}</code>.{approver_info}
+                Required Role: <code style="color: #38BDF8;">{required_role}</code>.{approver_info}
             </p>
         </div>
         """,
         unsafe_allow_html=True,
     )
+
+
+def render_section_heading(
+    title: str,
+    subtitle: Optional[str] = None,
+    icon: Optional[str] = None,
+) -> None:
+    """Render a consistent section title with icon and optional subtitle."""
+    icon_str = f"{icon} " if icon else ""
+    sub_html = f'<p style="color: #94A3B8; font-size: 0.92rem; margin: 4px 0 16px 0;">{subtitle}</p>' if subtitle else ""
+    st.markdown(
+        f"""
+        <div style="margin-top: 14px; margin-bottom: 8px;">
+            <h3 style="margin: 0; color: #F8FAFC; font-size: 1.25rem;">{icon_str}{title}</h3>
+            {sub_html}
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
+def render_badge(label: str, variant: str = "info") -> str:
+    """Generate HTML string for a styled status badge."""
+    return f'<span class="lens-badge badge-{variant}">{label}</span>'
 
 
 def render_public_landing_view(store: Optional[WorkspaceStore] = None) -> None:

@@ -116,18 +116,16 @@ def render_page_header(
     if badge_label:
         context_html += f'<span class="lens-badge badge-{badge_variant}">{badge_label}</span>'
 
-    st.markdown(
-        f"""
-        <div class="lens-header">
-            <div class="lens-header-top">
-                <h1 class="lens-title">{title}</h1>
-                <div style="display: flex; align-items: center; gap: 8px;">{context_html}</div>
-            </div>
-            <p class="lens-subtitle">{subtitle}</p>
-        </div>
-        """,
-        unsafe_allow_html=True,
+    header_html = (
+        f'<div class="lens-header">'
+        f'<div class="lens-header-top">'
+        f'<h1 class="lens-title">{title}</h1>'
+        f'<div style="display: flex; align-items: center; gap: 8px;">{context_html}</div>'
+        f'</div>'
+        f'<p class="lens-subtitle">{subtitle}</p>'
+        f'</div>'
     )
+    st.markdown(header_html, unsafe_allow_html=True)
 
 
 def render_stat_card(
@@ -139,33 +137,24 @@ def render_stat_card(
 ) -> None:
     """Render an editorial stat metric card with optional icon and variant accents."""
     sub_html = f'<div class="lens-stat-sub">{subtext}</div>' if subtext else ""
-    icon_html = (
-        f'<div style="font-size: 1.25rem; background: rgba(255,255,255,0.06); width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08);">{icon}</div>'
-        if icon
-        else ""
-    )
+    if icon:
+        top_row = (
+            f'<div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px;">'
+            f'<div class="lens-stat-label">{label}</div>'
+            f'<div class="lens-stat-icon">{icon}</div>'
+            f'</div>'
+        )
+    else:
+        top_row = f'<div class="lens-stat-label">{label}</div>'
 
-    top_row = (
-        f"""
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px;">
-            <div class="lens-stat-label">{label}</div>
-            {icon_html}
-        </div>
-        """
-        if icon
-        else f'<div class="lens-stat-label">{label}</div>'
+    card_html = (
+        f'<div class="lens-stat-box lens-stat-{variant}">'
+        f'{top_row}'
+        f'<div class="lens-stat-number">{number}</div>'
+        f'{sub_html}'
+        f'</div>'
     )
-
-    st.markdown(
-        f"""
-        <div class="lens-stat-box lens-stat-{variant}">
-            {top_row}
-            <div class="lens-stat-number">{number}</div>
-            {sub_html}
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
+    st.markdown(card_html, unsafe_allow_html=True)
 
 
 def render_empty_state(
@@ -174,16 +163,14 @@ def render_empty_state(
     icon: str = "🔬",
 ) -> None:
     """Render an informative scientific empty state with radial glow."""
-    st.markdown(
-        f"""
-        <div class="lens-empty-state">
-            <div class="lens-empty-icon">{icon}</div>
-            <div class="lens-empty-title">{title}</div>
-            <div class="lens-empty-desc">{description}</div>
-        </div>
-        """,
-        unsafe_allow_html=True,
+    empty_html = (
+        f'<div class="lens-empty-state">'
+        f'<div class="lens-empty-icon">{icon}</div>'
+        f'<div class="lens-empty-title">{title}</div>'
+        f'<div class="lens-empty-desc">{description}</div>'
+        f'</div>'
     )
+    st.markdown(empty_html, unsafe_allow_html=True)
 
 
 def render_citation_panel(
@@ -207,21 +194,19 @@ def render_citation_panel(
     meta_info = f"📍 {page_str} · {sec_str}{chunk_str}"
     label_html = f'<strong style="color: #F8FAFC; font-size: 0.95rem;">{label}</strong>' if label else ""
 
-    st.markdown(
-        f"""
-        <div class="lens-citation-panel">
-            <div class="lens-citation-header">
-                <div>{label_html}</div>
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <span class="lens-citation-badge">{meta_info}</span>
-                    {conf_badge}
-                </div>
-            </div>
-            <p class="lens-citation-quote">"{source_text}"</p>
-        </div>
-        """,
-        unsafe_allow_html=True,
+    citation_html = (
+        f'<div class="lens-citation-panel">'
+        f'<div class="lens-citation-header">'
+        f'<div>{label_html}</div>'
+        f'<div style="display: flex; align-items: center; gap: 8px;">'
+        f'<span class="lens-citation-badge">{meta_info}</span>'
+        f'{conf_badge}'
+        f'</div>'
+        f'</div>'
+        f'<p class="lens-citation-quote">"{source_text}"</p>'
+        f'</div>'
     )
+    st.markdown(citation_html, unsafe_allow_html=True)
 
 
 def render_approval_gate_banner(
@@ -244,23 +229,21 @@ def render_approval_gate_banner(
         else ""
     )
 
-    st.markdown(
-        f"""
-        <div class="approval-gate-banner">
-            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
-                <strong style="color: #FBBF24; font-size: 1rem; display: flex; align-items: center; gap: 8px;">
-                    🛡️ Human Researcher Approval Gate: {stage_name}
-                </strong>
-                {status_badge}
-            </div>
-            <p style="margin: 8px 0 0 0; font-size: 0.92rem; color: #CBD5E1; line-height: 1.5;">
-                Strict scientific integrity requires explicit authorization before compute execution.
-                Required Role: <code style="color: #38BDF8;">{required_role}</code>.{approver_info}
-            </p>
-        </div>
-        """,
-        unsafe_allow_html=True,
+    banner_html = (
+        f'<div class="approval-gate-banner">'
+        f'<div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">'
+        f'<strong style="color: #FBBF24; font-size: 1rem; display: flex; align-items: center; gap: 8px;">'
+        f'🛡️ Human Researcher Approval Gate: {stage_name}'
+        f'</strong>'
+        f'{status_badge}'
+        f'</div>'
+        f'<p style="margin: 8px 0 0 0; font-size: 0.92rem; color: #CBD5E1; line-height: 1.5;">'
+        f'Strict scientific integrity requires explicit authorization before compute execution. '
+        f'Required Role: <code style="color: #38BDF8;">{required_role}</code>.{approver_info}'
+        f'</p>'
+        f'</div>'
     )
+    st.markdown(banner_html, unsafe_allow_html=True)
 
 
 def render_section_heading(

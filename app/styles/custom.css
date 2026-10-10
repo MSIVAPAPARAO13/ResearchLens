@@ -308,6 +308,34 @@ code, pre, .lens-code, kbd {
     gap: 6px;
 }
 
+.lens-stat-icon {
+    font-size: 1.25rem;
+    background: rgba(255, 255, 255, 0.06);
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--lens-radius-sm);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.lens-stat-box.lens-stat-indigo::before {
+    background: linear-gradient(90deg, #6366F1, #818CF8);
+}
+
+.lens-stat-box.lens-stat-cyan::before {
+    background: linear-gradient(90deg, #06B6D4, #38BDF8);
+}
+
+.lens-stat-box.lens-stat-purple::before {
+    background: linear-gradient(90deg, #8B5CF6, #A78BFA);
+}
+
+.lens-stat-box.lens-stat-emerald::before {
+    background: linear-gradient(90deg, #10B981, #34D399);
+}
+
 /* ==========================================================================
    Evidence Citation Panels
    ========================================================================== */

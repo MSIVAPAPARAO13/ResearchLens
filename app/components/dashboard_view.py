@@ -118,18 +118,16 @@ def render_dashboard_view(store: Optional[WorkspaceStore] = None) -> None:
         if papers:
             for p in papers[:5]:
                 authors_str = p.authors if p.authors and p.authors != "Not detected" else "Authors unlisted"
-                st.markdown(
-                    f"""
-                    <div class="lens-card">
-                        <div class="lens-card-header">
-                            <strong style="color: #F8FAFC; font-size: 0.98rem; font-family: 'Space Grotesk', sans-serif;">📄 {p.title}</strong>
-                            <span class="lens-badge badge-info">{p.year or 'Year N/A'}</span>
-                        </div>
-                        <p style="margin: 0; font-size: 0.86rem; color: #94A3B8;">✍️ {authors_str}</p>
-                    </div>
-                    """,
-                    unsafe_allow_html=True,
+                paper_html = (
+                    f'<div class="lens-card">'
+                    f'<div class="lens-card-header">'
+                    f'<strong style="color: #F8FAFC; font-size: 0.98rem; font-family: \'Space Grotesk\', sans-serif;">📄 {p.title}</strong>'
+                    f'<span class="lens-badge badge-info">{p.year or "Year N/A"}</span>'
+                    f'</div>'
+                    f'<p style="margin: 0; font-size: 0.86rem; color: #94A3B8;">✍️ {authors_str}</p>'
+                    f'</div>'
                 )
+                st.markdown(paper_html, unsafe_allow_html=True)
         else:
             render_empty_state(
                 title="No Papers Saved Yet",
@@ -143,17 +141,15 @@ def render_dashboard_view(store: Optional[WorkspaceStore] = None) -> None:
         if activities:
             for act in activities[:8]:
                 timestamp_str = act.timestamp[:19].replace("T", " ") if getattr(act, "timestamp", None) else ""
-                st.markdown(
-                    f"""
-                    <div style="position: relative; border-left: 2px solid #6366F1; padding-left: 14px; margin-bottom: 12px;">
-                        <div style="font-size: 0.88rem; color: #F8FAFC; font-weight: 500;">{act.summary}</div>
-                        <div style="font-size: 0.78rem; color: #64748B; font-family: 'JetBrains Mono', monospace; margin-top: 2px;">
-                            <span style="color: #38BDF8;">{act.action}</span> · {timestamp_str}
-                        </div>
-                    </div>
-                    """,
-                    unsafe_allow_html=True,
+                act_html = (
+                    f'<div style="position: relative; border-left: 2px solid #6366F1; padding-left: 14px; margin-bottom: 12px;">'
+                    f'<div style="font-size: 0.88rem; color: #F8FAFC; font-weight: 500;">{act.summary}</div>'
+                    f'<div style="font-size: 0.78rem; color: #64748B; font-family: \'JetBrains Mono\', monospace; margin-top: 2px;">'
+                    f'<span style="color: #38BDF8;">{act.action}</span> · {timestamp_str}'
+                    f'</div>'
+                    f'</div>'
                 )
+                st.markdown(act_html, unsafe_allow_html=True)
         else:
             render_empty_state(
                 title="No Activity Logged",

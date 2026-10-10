@@ -1,0 +1,45 @@
+name: ResearchLens Automated CI & Evaluation Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  verify-and-evaluate:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 1
+
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+        cache: 'pip'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install -r requirements-dev.txt
+
+    - name: 1. Bytecode compilation verification
+      run: |
+        python -m compileall src app tests scripts evaluation
+
+    - name: 2. Code style & linting check (Ruff)
+      run: |
+        python -m ruff check .
+
+    - name: 3. Unit & Integration test suite
+      run: |
+        python -m pytest -v
+
+    - name: 4. Lightweight NLP evaluation benchmark (CPU only)
+      run: |
+        python scripts/run_evaluation.py --synthetic --runs 1

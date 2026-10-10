@@ -1,0 +1,439 @@
+/* ==========================================================================
+   ResearchLens Design System — Scientific Intelligence Workspace
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+:root {
+    /* Color Palette Tokens */
+    --lens-bg-root: #0B0F19;
+    --lens-surface-primary: #111827;
+    --lens-surface-card: #182234;
+    --lens-surface-elevated: #202D44;
+    --lens-surface-hover: #263554;
+    
+    --lens-border-subtle: #263554;
+    --lens-border-medium: #334466;
+    --lens-border-focus: #3B82F6;
+    
+    --lens-text-primary: #F8FAFC;
+    --lens-text-secondary: #94A3B8;
+    --lens-text-muted: #64748B;
+    
+    /* Semantic Brand & Status Tokens */
+    --lens-accent-blue: #2563EB;
+    --lens-accent-sky: #0EA5E9;
+    --lens-status-success: #10B981;
+    --lens-status-warning: #F59E0B;
+    --lens-status-danger: #EF4444;
+    --lens-status-purple: #8B5CF6;
+    
+    /* Elevation & Radius */
+    --lens-radius-sm: 6px;
+    --lens-radius-md: 10px;
+    --lens-radius-lg: 14px;
+    --lens-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
+    --lens-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.35);
+}
+
+/* Global Typography & Resets */
+html, body, [class*="css"] {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color: var(--lens-text-primary);
+    -webkit-font-smoothing: antialiased;
+}
+
+code, pre, .lens-code {
+    font-family: 'JetBrains Mono', 'Fira Code', Menlo, monospace !important;
+}
+
+/* Accessible Focus Outlines */
+*:focus-visible {
+    outline: 2px solid var(--lens-border-focus) !important;
+    outline-offset: 2px !important;
+}
+
+/* ==========================================================================
+   Header & Application Shell
+   ========================================================================== */
+.lens-header {
+    background: linear-gradient(180deg, #131D31 0%, #0F172A 100%);
+    border: 1px solid var(--lens-border-subtle);
+    border-radius: var(--lens-radius-md);
+    padding: 20px 24px;
+    margin-bottom: 20px;
+    box-shadow: var(--lens-shadow-sm);
+}
+
+.lens-header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.lens-title {
+    font-size: 1.85rem;
+    font-weight: 700;
+    color: var(--lens-text-primary);
+    margin: 0;
+    letter-spacing: -0.025em;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.lens-subtitle {
+    font-size: 0.95rem;
+    color: var(--lens-text-secondary);
+    margin: 6px 0 0 0;
+    line-height: 1.5;
+}
+
+.lens-context-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #1E293B;
+    border: 1px solid var(--lens-border-subtle);
+    color: #38BDF8;
+    padding: 6px 12px;
+    border-radius: 9999px;
+    font-size: 0.82rem;
+    font-weight: 500;
+}
+
+/* ==========================================================================
+   Card & Panel Containers
+   ========================================================================== */
+.lens-card {
+    background: var(--lens-surface-card);
+    border: 1px solid var(--lens-border-subtle);
+    border-radius: var(--lens-radius-md);
+    padding: 18px 20px;
+    margin-bottom: 16px;
+    box-shadow: var(--lens-shadow-sm);
+    transition: border-color 0.15s ease;
+}
+
+.lens-card:hover {
+    border-color: var(--lens-border-medium);
+}
+
+.lens-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--lens-border-subtle);
+    padding-bottom: 10px;
+    margin-bottom: 14px;
+}
+
+.lens-card-title {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--lens-text-primary);
+    margin: 0;
+}
+
+/* Metric / Stat Boxes */
+.lens-stat-box {
+    background: var(--lens-surface-card);
+    border: 1px solid var(--lens-border-subtle);
+    border-radius: var(--lens-radius-md);
+    padding: 16px;
+    text-align: left;
+    height: 100%;
+}
+
+.lens-stat-number {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--lens-text-primary);
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+}
+
+.lens-stat-label {
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--lens-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 4px;
+}
+
+.lens-stat-sub {
+    font-size: 0.78rem;
+    color: var(--lens-text-muted);
+    margin-top: 4px;
+}
+
+/* ==========================================================================
+   Evidence Citation Panels
+   ========================================================================== */
+.lens-citation-panel {
+    background: var(--lens-surface-card);
+    border-left: 3px solid var(--lens-accent-sky);
+    border-top: 1px solid var(--lens-border-subtle);
+    border-right: 1px solid var(--lens-border-subtle);
+    border-bottom: 1px solid var(--lens-border-subtle);
+    border-radius: var(--lens-radius-sm);
+    padding: 14px 16px;
+    margin-bottom: 12px;
+}
+
+.lens-citation-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    font-size: 0.85rem;
+}
+
+.lens-citation-badge {
+    background: #1E293B;
+    color: #38BDF8;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    border: 1px solid #334155;
+}
+
+.lens-citation-quote {
+    color: #CBD5E1;
+    font-size: 0.92rem;
+    line-height: 1.55;
+    margin: 0;
+    font-style: italic;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 8px 12px;
+    border-radius: 4px;
+    border-left: 2px solid #475569;
+}
+
+/* ==========================================================================
+   Badges, Pills & Status Indicators
+   ========================================================================== */
+.lens-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+}
+
+.badge-success {
+    background: rgba(16, 185, 129, 0.15);
+    color: #34D399;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.badge-warning {
+    background: rgba(245, 158, 11, 0.15);
+    color: #FBBF24;
+    border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.badge-danger {
+    background: rgba(239, 68, 68, 0.15);
+    color: #F87171;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.badge-info {
+    background: rgba(14, 165, 233, 0.15);
+    color: #38BDF8;
+    border: 1px solid rgba(14, 165, 233, 0.3);
+}
+
+.badge-neutral {
+    background: #1E293B;
+    color: #94A3B8;
+    border: 1px solid #334155;
+}
+
+.lens-tag {
+    display: inline-block;
+    background: #1E293B;
+    color: #E2E8F0;
+    border: 1px solid #334155;
+    padding: 3px 9px;
+    border-radius: 9999px;
+    font-size: 0.82rem;
+    margin: 2px 4px 2px 0;
+}
+
+/* ==========================================================================
+   Editorial Callouts
+   ========================================================================== */
+.tldr-card {
+    background: rgba(37, 99, 235, 0.08);
+    border-left: 4px solid var(--lens-accent-blue);
+    border-top: 1px solid rgba(37, 99, 235, 0.2);
+    border-right: 1px solid rgba(37, 99, 235, 0.2);
+    border-bottom: 1px solid rgba(37, 99, 235, 0.2);
+    padding: 14px 18px;
+    border-radius: var(--lens-radius-sm);
+    margin-bottom: 16px;
+    font-size: 0.95rem;
+    line-height: 1.55;
+}
+
+.exec-card {
+    background: rgba(16, 185, 129, 0.06);
+    border-left: 4px solid var(--lens-status-success);
+    border-top: 1px solid rgba(16, 185, 129, 0.2);
+    border-right: 1px solid rgba(16, 185, 129, 0.2);
+    border-bottom: 1px solid rgba(16, 185, 129, 0.2);
+    padding: 14px 18px;
+    border-radius: var(--lens-radius-sm);
+    margin-bottom: 16px;
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.approval-gate-banner {
+    background: rgba(245, 158, 11, 0.08);
+    border: 1px solid rgba(245, 158, 11, 0.35);
+    border-left: 4px solid var(--lens-status-warning);
+    border-radius: var(--lens-radius-sm);
+    padding: 16px 20px;
+    margin: 16px 0;
+}
+
+/* Empty State Box */
+.lens-empty-state {
+    text-align: center;
+    padding: 36px 20px;
+    background: var(--lens-surface-card);
+    border: 1px dashed var(--lens-border-subtle);
+    border-radius: var(--lens-radius-md);
+    margin: 16px 0;
+}
+
+.lens-empty-icon {
+    font-size: 2.2rem;
+    margin-bottom: 12px;
+    opacity: 0.8;
+}
+
+.lens-empty-title {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--lens-text-primary);
+    margin-bottom: 6px;
+}
+
+.lens-empty-desc {
+    font-size: 0.88rem;
+    color: var(--lens-text-secondary);
+    max-width: 480px;
+    margin: 0 auto;
+    line-height: 1.5;
+}
+
+/* Workflow Stage Progress Track */
+.lens-stage-track {
+    display: flex;
+    overflow-x: auto;
+    gap: 8px;
+    padding: 10px 0;
+    margin: 12px 0;
+}
+
+.lens-stage-step {
+    flex: 1;
+    min-width: 100px;
+    background: #1E293B;
+    border: 1px solid #334155;
+    border-radius: 4px;
+    padding: 8px;
+    font-size: 0.78rem;
+    text-align: center;
+    color: #94A3B8;
+}
+
+.lens-stage-step.active {
+    background: rgba(37, 99, 235, 0.2);
+    border-color: #3B82F6;
+    color: #F8FAFC;
+    font-weight: 600;
+}
+
+.lens-stage-step.completed {
+    background: rgba(16, 185, 129, 0.15);
+    border-color: #10B981;
+    color: #34D399;
+}
+
+/* ==========================================================================
+   Streamlit Component Fine-Tuning
+   ========================================================================== */
+/* Tab Navigation */
+div[data-testid="stTabs"] button[role="tab"] {
+    font-size: 0.92rem !important;
+    font-weight: 500 !important;
+    color: var(--lens-text-secondary) !important;
+    padding: 8px 16px !important;
+    border-radius: var(--lens-radius-sm) !important;
+}
+
+div[data-testid="stTabs"] button[aria-selected="true"] {
+    color: #38BDF8 !important;
+    font-weight: 600 !important;
+    background: rgba(56, 189, 248, 0.08) !important;
+}
+
+/* Form Controls & Inputs */
+div[data-baseweb="input"] {
+    background-color: var(--lens-surface-primary) !important;
+    border-color: var(--lens-border-subtle) !important;
+    border-radius: var(--lens-radius-sm) !important;
+}
+
+div[data-baseweb="select"] {
+    background-color: var(--lens-surface-primary) !important;
+    border-color: var(--lens-border-subtle) !important;
+}
+
+/* File Uploader */
+div[data-testid="stFileUploader"] {
+    background: var(--lens-surface-card);
+    border: 1px dashed var(--lens-border-medium);
+    border-radius: var(--lens-radius-md);
+    padding: 16px;
+}
+
+/* Streamlit Expander */
+div[data-testid="stExpander"] {
+    background: var(--lens-surface-card);
+    border: 1px solid var(--lens-border-subtle);
+    border-radius: var(--lens-radius-sm);
+    margin-bottom: 10px;
+}
+
+/* Streamlit Dataframe */
+div[data-testid="stDataFrame"] {
+    border: 1px solid var(--lens-border-subtle);
+    border-radius: var(--lens-radius-sm);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .lens-header {
+        padding: 16px;
+    }
+    .lens-title {
+        font-size: 1.45rem;
+    }
+    .lens-stat-number {
+        font-size: 1.4rem;
+    }
+}

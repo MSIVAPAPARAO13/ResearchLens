@@ -1,0 +1,84 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv/
+
+# Environment variables & secrets
+.env
+.env.local
+*.env
+
+# Hugging Face & Model checkpoints
+models/*
+!models/.gitkeep
+*.pt
+*.pth
+*.bin
+*.safetensors
+*.onnx
+
+# Data files
+data/raw/*
+!data/raw/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
+data/samples/*
+!data/samples/.gitkeep
+*.pdf
+temp.pdf
+
+# Evaluation results & cache
+evaluation/results/*
+!evaluation/results/.gitkeep
+evaluation/reports/*
+!evaluation/reports/.gitkeep
+.cache/
+.pytest_cache/
+.coverage
+htmlcov/
+.ruff_cache/
+
+# Streamlit
+.streamlit/*.local.toml
+
+# IDE & OS
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# MLOps & Workspace runtime tracking
+mlruns/
+data/workspaces/
+data/test_workspace/
+data/artifacts/
+data/topics/
+!data/sample_research_paper.pdf
+

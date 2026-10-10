@@ -1,0 +1,19 @@
+# Core NLP & ML
+torch>=2.4.0
+transformers>=4.45.0
+sentence-transformers>=3.0.0
+faiss-cpu>=1.8.0
+rank-bm25>=0.2.2
+spacy>=3.8.0
+nltk>=3.9.0
+pymupdf>=1.24.0
+
+# Evaluation
+rouge-score>=0.1.2
+
+# Application & UI
+streamlit>=1.40.0
+pydantic>=2.8.0
+
+# MLOps & Experiment Tracking
+mlflow>=3.0.0

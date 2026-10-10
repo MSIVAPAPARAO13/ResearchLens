@@ -1,0 +1,39 @@
+# Dockerfile.nlp - ResearchLens NLP & RAG Experiment Runtime (Phase 14)
+# Build command:
+#   docker build -f docker/experiments/Dockerfile.nlp -t researchlens/nlp-experiment:1.0 .
+
+FROM python:3.11-slim
+
+LABEL maintainer="ResearchLens Team"
+LABEL description="Sandboxed NLP evaluation and experiment runtime"
+
+# Create non-root user
+RUN groupadd -g 1000 research && \
+    useradd -u 1000 -g research -m -s /bin/bash researcher
+
+WORKDIR /workspace
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    curl \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy dependency specifications
+COPY requirements.txt /workspace/requirements.txt
+
+# Install dependencies from approved requirements.txt (never arbitrary pip install)
+RUN pip install --no-cache-dir -r /workspace/requirements.txt
+
+# Create standard directories
+RUN mkdir -p /workspace/output /workspace/data && \
+    chown -R researcher:research /workspace
+
+USER researcher
+
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE=1
+
+ENTRYPOINT ["python"]
+CMD ["scripts/experiments/deterministic_demo.py", "--output-dir", "/workspace/output"]

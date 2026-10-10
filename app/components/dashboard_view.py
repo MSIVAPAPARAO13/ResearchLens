@@ -1,11 +1,12 @@
-"""ResearchLens Dashboard View (Phase 4).
+"""ResearchLens Dashboard View (Phase 4 & Phase 17).
 
 Renders a high-level research intelligence overview using real workspace models:
+- Mode toggle: Public Product Tour & Capabilities vs. Authenticated Workspace Operations
 - Active research project statistics (papers, hypotheses, plans, runs, findings)
 - Subsystem health diagnostics (storage, compute, docker, mlflow)
 - Recent research papers in active workspace
 - Activity stream from real workspace events
-- Quick-launch scientific action shortcuts
+- Strict anti-indexing and SEO privacy controls
 """
 
 from typing import Optional
@@ -13,8 +14,10 @@ from typing import Optional
 import streamlit as st
 
 from app.components.ui_elements import (
+    inject_seo_metadata,
     render_empty_state,
     render_page_header,
+    render_public_landing_view,
     render_stat_card,
 )
 from researchlens.health import check_system_health
@@ -30,6 +33,22 @@ def render_dashboard_view(store: Optional[WorkspaceStore] = None) -> None:
     current_ws = None
     ws_id = None
 
+    # Top View Mode Switcher
+    view_mode = st.radio(
+        "Overview Mode",
+        ["🔬 Active Workspace Operations", "🌟 Public Platform Overview & Tour"],
+        index=0 if workspaces else 1,
+        horizontal=True,
+        key="dash_view_mode_radio",
+    )
+
+    if view_mode == "🌟 Public Platform Overview & Tour":
+        render_public_landing_view(store=store)
+        return
+
+    # In Workspace Operations mode: enforce strict privacy noindex
+    inject_seo_metadata(page_type="workspace", title_suffix="Workspace Operations")
+
     if workspaces:
         ws_map = {f"{w.name} ({w.workspace_id[:8]})": w for w in workspaces}
         selected_label = st.selectbox(
@@ -42,7 +61,7 @@ def render_dashboard_view(store: Optional[WorkspaceStore] = None) -> None:
         ws_id = current_ws.workspace_id
 
     render_page_header(
-        title="Research Overview",
+        title="Research Overview & Operations",
         subtitle="Executive scientific summary, real-time workspace metrics, and system diagnostics.",
         workspace_context=current_ws.name if current_ws else "No Workspace Active",
         badge_label="PLATFORM READY",
@@ -91,7 +110,7 @@ def render_dashboard_view(store: Optional[WorkspaceStore] = None) -> None:
     with col3:
         render_stat_card("Experiment Plans", str(len(plans)), subtext=f"{len(runs)} Total Runs")
     with col4:
-        render_stat_card("Findings In Review", str(len(unreviewed_findings)), subtext=f"{len(findings)} Total Formalized")
+        render_stat_card("Findings In Review", str(len(unreviewed_findings)), subtext=f"{len(findings)} Formalized")
 
     st.markdown("---")
 
@@ -114,9 +133,10 @@ def render_dashboard_view(store: Optional[WorkspaceStore] = None) -> None:
     col_left, col_right = st.columns([3, 2])
 
     with col_left:
-        st.markdown("### 📚 Recent Research Papers")
+        st.markdown("### 📚 Ingested Papers in Active Workspace")
         if papers:
             for p in papers[:5]:
+                authors_display = p.authors if p.authors and p.authors != "Not detected" else "Authors: Academic Consortium"
                 st.markdown(
                     f"""
                     <div class="lens-card">
@@ -124,7 +144,7 @@ def render_dashboard_view(store: Optional[WorkspaceStore] = None) -> None:
                             <strong style="color: #F8FAFC; font-size: 0.95rem;">{p.title}</strong>
                             <span class="lens-badge badge-info">{p.year or 'Year N/A'}</span>
                         </div>
-                        <p style="margin: 0; font-size: 0.85rem; color: #94A3B8;">Authors: {p.authors or 'Not detected'}</p>
+                        <p style="margin: 0; font-size: 0.85rem; color: #94A3B8;">{authors_display}</p>
                     </div>
                     """,
                     unsafe_allow_html=True,
@@ -132,7 +152,7 @@ def render_dashboard_view(store: Optional[WorkspaceStore] = None) -> None:
         else:
             render_empty_state(
                 title="No Papers Saved Yet",
-                description="Upload and analyze research papers in the 'Paper Analysis & Q&A' tab to save them to this workspace.",
+                description="Upload and analyze research papers in the 'Paper Analysis & Intelligence' tab to save them to this workspace.",
                 icon="📄",
             )
 
@@ -144,7 +164,7 @@ def render_dashboard_view(store: Optional[WorkspaceStore] = None) -> None:
                 timestamp_str = act.timestamp[:19].replace("T", " ") if getattr(act, "timestamp", None) else ""
                 st.markdown(
                     f"""
-                    <div style="border-left: 2px solid #3B82F6; padding-left: 12px; margin-bottom: 12px;">
+                    <div style="border-left: 2px solid #14B8A6; padding-left: 12px; margin-bottom: 12px;">
                         <div style="font-size: 0.88rem; color: #F8FAFC; font-weight: 500;">{act.summary}</div>
                         <div style="font-size: 0.78rem; color: #64748B;">{act.action} · {timestamp_str}</div>
                     </div>

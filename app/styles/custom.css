@@ -1,68 +1,129 @@
 /* ==========================================================================
-   ResearchLens Design System — Scientific Intelligence Workspace
+   ResearchLens Design System — Scientific Intelligence SaaS Platform
+   ==========================================================================
+   Color System:
+   - Navy / Indigo Foundation: Deep midnight surfaces with warm undertones
+   - Scientific Teal Accents: Primary actions, citations, and data signals
+   - Restrained Violet Highlights: AI synthesis, hypotheses, and registry states
+   - Warm Neutral Surfaces: Slate borders, balanced contrast, and elevation
+   - Semantic Status: Emerald (Success), Amber (Warning/Gate), Rose (Danger), Sky (Info)
+   - Accessibility: WCAG AA contrast compliant (>= 4.5:1 text, >= 3:1 ui components)
    ========================================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 
 :root {
-    /* Color Palette Tokens */
-    --lens-bg-root: #0B0F19;
-    --lens-surface-primary: #111827;
-    --lens-surface-card: #182234;
-    --lens-surface-elevated: #202D44;
-    --lens-surface-hover: #263554;
-    
-    --lens-border-subtle: #263554;
-    --lens-border-medium: #334466;
-    --lens-border-focus: #3B82F6;
-    
-    --lens-text-primary: #F8FAFC;
-    --lens-text-secondary: #94A3B8;
-    --lens-text-muted: #64748B;
-    
-    /* Semantic Brand & Status Tokens */
+    /* Foundation Colors (Refined Navy / Indigo) */
+    --lens-bg-root: #0A0F1D;
+    --lens-surface-primary: #0F172A;
+    --lens-surface-card: #131D31;
+    --lens-surface-elevated: #1A2640;
+    --lens-surface-hover: #223354;
+    --lens-surface-glass: rgba(19, 29, 49, 0.85);
+
+    /* Warm Neutral Borders & Lines */
+    --lens-border-subtle: #22314E;
+    --lens-border-medium: #324467;
+    --lens-border-focus: #14B8A6;
+
+    /* Text Colors (Validated WCAG AA Contrast) */
+    --lens-text-primary: #F8FAFC;       /* Off-white, 14.8:1 contrast on #0A0F1D */
+    --lens-text-secondary: #94A3B8;     /* Slate grey, 5.2:1 contrast */
+    --lens-text-muted: #64748B;         /* Muted caption, 3.4:1 contrast */
+    --lens-text-inverse: #0A0F1D;
+
+    /* Primary Accent: Scientific Teal / Cyan & Blue */
     --lens-accent-blue: #2563EB;
     --lens-accent-sky: #0EA5E9;
+    --lens-accent-teal: #0D9488;
+    --lens-accent-teal-light: #14B8A6;
+    --lens-accent-teal-subtle: rgba(20, 184, 166, 0.12);
+    --lens-accent-teal-border: rgba(20, 184, 166, 0.35);
+    --lens-accent-cyan: #06B6D4;
+    --lens-accent-cyan-subtle: rgba(6, 182, 212, 0.12);
+
+    /* Restrained Violet Highlights (AI & Synthesis) */
+    --lens-accent-violet: #8B5CF6;
+    --lens-accent-violet-light: #A78BFA;
+    --lens-accent-violet-subtle: rgba(139, 92, 246, 0.12);
+    --lens-accent-violet-border: rgba(139, 92, 246, 0.30);
+
+    /* Semantic Status Tokens */
     --lens-status-success: #10B981;
+    --lens-status-success-subtle: rgba(16, 185, 129, 0.14);
+    --lens-status-success-border: rgba(16, 185, 129, 0.35);
+
     --lens-status-warning: #F59E0B;
+    --lens-status-warning-subtle: rgba(245, 158, 11, 0.14);
+    --lens-status-warning-border: rgba(245, 158, 11, 0.35);
+
     --lens-status-danger: #EF4444;
-    --lens-status-purple: #8B5CF6;
-    
-    /* Elevation & Radius */
+    --lens-status-danger-subtle: rgba(239, 68, 68, 0.14);
+    --lens-status-danger-border: rgba(239, 68, 68, 0.35);
+
+    --lens-status-info: #38BDF8;
+    --lens-status-info-subtle: rgba(56, 189, 248, 0.14);
+    --lens-status-info-border: rgba(56, 189, 248, 0.35);
+
+    /* Geometry & Depth */
+    --lens-radius-xs: 4px;
     --lens-radius-sm: 6px;
     --lens-radius-md: 10px;
-    --lens-radius-lg: 14px;
-    --lens-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
-    --lens-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.35);
+    --lens-radius-lg: 16px;
+    --lens-radius-pill: 9999px;
+
+    --lens-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.45);
+    --lens-shadow-md: 0 4px 14px rgba(0, 0, 0, 0.40);
+    --lens-shadow-lg: 0 10px 28px rgba(0, 0, 0, 0.50);
 }
 
-/* Global Typography & Resets */
+/* ==========================================================================
+   Global Reset & Typography
+   ========================================================================== */
 html, body, [class*="css"] {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
     color: var(--lens-text-primary);
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
-code, pre, .lens-code {
+code, pre, .lens-code, [data-testid="stMarkdownContainer"] code {
     font-family: 'JetBrains Mono', 'Fira Code', Menlo, monospace !important;
+    background-color: rgba(15, 23, 42, 0.8) !important;
+    border: 1px solid var(--lens-border-subtle) !important;
+    border-radius: var(--lens-radius-xs) !important;
+    padding: 0.15rem 0.4rem !important;
+    font-size: 0.86em !important;
+    color: #38BDF8 !important;
 }
 
-/* Accessible Focus Outlines */
 *:focus-visible {
-    outline: 2px solid var(--lens-border-focus) !important;
+    outline: 2px solid var(--lens-accent-teal-light) !important;
     outline-offset: 2px !important;
 }
 
 /* ==========================================================================
-   Header & Application Shell
+   Application Shell & Navigation Header
    ========================================================================== */
 .lens-header {
-    background: linear-gradient(180deg, #131D31 0%, #0F172A 100%);
+    background: linear-gradient(180deg, #131E34 0%, #0E1629 100%);
     border: 1px solid var(--lens-border-subtle);
     border-radius: var(--lens-radius-md);
-    padding: 20px 24px;
-    margin-bottom: 20px;
+    padding: 22px 26px;
+    margin-bottom: 22px;
     box-shadow: var(--lens-shadow-sm);
+    position: relative;
+    overflow: hidden;
+}
+
+.lens-header::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(180deg, var(--lens-accent-teal-light) 0%, var(--lens-accent-violet) 100%);
 }
 
 .lens-header-top {
@@ -81,27 +142,29 @@ code, pre, .lens-code {
     letter-spacing: -0.025em;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
 }
 
 .lens-subtitle {
     font-size: 0.95rem;
     color: var(--lens-text-secondary);
     margin: 6px 0 0 0;
-    line-height: 1.5;
+    line-height: 1.55;
+    max-width: 900px;
 }
 
 .lens-context-badge {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    background: #1E293B;
-    border: 1px solid var(--lens-border-subtle);
-    color: #38BDF8;
-    padding: 6px 12px;
-    border-radius: 9999px;
+    background: #18243B;
+    border: 1px solid var(--lens-border-medium);
+    color: var(--lens-accent-cyan);
+    padding: 6px 14px;
+    border-radius: var(--lens-radius-pill);
     font-size: 0.82rem;
-    font-weight: 500;
+    font-weight: 600;
+    letter-spacing: 0.02em;
 }
 
 /* ==========================================================================
@@ -137,18 +200,214 @@ code, pre, .lens-code {
     margin: 0;
 }
 
-/* Metric / Stat Boxes */
+/* ==========================================================================
+   Public Product Landing Page Components
+   ========================================================================== */
+.lens-hero {
+    background: radial-gradient(circle at 80% 20%, rgba(20, 184, 166, 0.08) 0%, transparent 60%),
+                radial-gradient(circle at 20% 80%, rgba(139, 92, 246, 0.07) 0%, transparent 60%),
+                linear-gradient(180deg, #131E34 0%, #0D1424 100%);
+    border: 1px solid var(--lens-border-subtle);
+    border-radius: var(--lens-radius-lg);
+    padding: 44px 36px;
+    margin-bottom: 28px;
+    box-shadow: var(--lens-shadow-md);
+    position: relative;
+}
+
+.lens-hero-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(20, 184, 166, 0.12);
+    border: 1px solid var(--lens-accent-teal-border);
+    color: var(--lens-accent-teal-light);
+    padding: 6px 14px;
+    border-radius: var(--lens-radius-pill);
+    font-size: 0.82rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 16px;
+}
+
+.lens-hero-title {
+    font-size: 2.35rem;
+    font-weight: 800;
+    color: #FFFFFF;
+    letter-spacing: -0.03em;
+    line-height: 1.25;
+    margin: 0 0 16px 0;
+}
+
+.lens-hero-desc {
+    font-size: 1.1rem;
+    color: var(--lens-text-secondary);
+    line-height: 1.65;
+    max-width: 860px;
+    margin: 0 0 24px 0;
+}
+
+.lens-hero-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 18px;
+}
+
+.lens-hero-badge-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #162238;
+    border: 1px solid var(--lens-border-medium);
+    color: #E2E8F0;
+    padding: 6px 12px;
+    border-radius: var(--lens-radius-sm);
+    font-size: 0.84rem;
+    font-weight: 500;
+}
+
+/* Feature & Capability Cards */
+.lens-feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 18px;
+    margin: 20px 0 32px 0;
+}
+
+.lens-feature-card {
+    background: var(--lens-surface-card);
+    border: 1px solid var(--lens-border-subtle);
+    border-radius: var(--lens-radius-md);
+    padding: 22px 20px;
+    transition: transform 0.15s ease, border-color 0.15s ease;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.lens-feature-card:hover {
+    border-color: var(--lens-accent-teal-border);
+    transform: translateY(-2px);
+}
+
+.lens-feature-icon {
+    font-size: 1.8rem;
+    margin-bottom: 12px;
+}
+
+.lens-feature-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--lens-text-primary);
+    margin: 0 0 8px 0;
+}
+
+.lens-feature-desc {
+    font-size: 0.9rem;
+    color: var(--lens-text-secondary);
+    line-height: 1.55;
+    margin: 0;
+    flex-grow: 1;
+}
+
+/* Scientific Comparison Matrix Table */
+.lens-table-container {
+    background: var(--lens-surface-card);
+    border: 1px solid var(--lens-border-subtle);
+    border-radius: var(--lens-radius-md);
+    overflow-x: auto;
+    margin: 20px 0 32px 0;
+    box-shadow: var(--lens-shadow-sm);
+}
+
+.lens-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 0.88rem;
+}
+
+.lens-table th {
+    background: #162238;
+    color: #CBD5E1;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.78rem;
+    letter-spacing: 0.05em;
+    padding: 12px 18px;
+    border-bottom: 1px solid var(--lens-border-medium);
+}
+
+.lens-table td {
+    padding: 13px 18px;
+    border-bottom: 1px solid var(--lens-border-subtle);
+    color: var(--lens-text-primary);
+    vertical-align: middle;
+}
+
+.lens-table tr:nth-child(even) {
+    background: rgba(255, 255, 255, 0.015);
+}
+
+.lens-table tr:hover {
+    background: var(--lens-surface-hover);
+}
+
+.lens-table td.col-brand {
+    color: var(--lens-accent-teal-light);
+    font-weight: 600;
+}
+
+/* Privacy & Security Charter Box */
+.lens-charter-box {
+    background: linear-gradient(180deg, #142036 0%, #0F1829 100%);
+    border: 1px solid var(--lens-accent-teal-border);
+    border-left: 4px solid var(--lens-accent-teal-light);
+    border-radius: var(--lens-radius-md);
+    padding: 24px 26px;
+    margin: 24px 0;
+}
+
+.lens-charter-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #FFFFFF;
+    margin: 0 0 10px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.lens-charter-desc {
+    font-size: 0.92rem;
+    color: #CBD5E1;
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* ==========================================================================
+   Metric & Stat Cards
+   ========================================================================== */
 .lens-stat-box {
     background: var(--lens-surface-card);
     border: 1px solid var(--lens-border-subtle);
     border-radius: var(--lens-radius-md);
-    padding: 16px;
+    padding: 18px 20px;
     text-align: left;
     height: 100%;
+    box-shadow: var(--lens-shadow-sm);
+    transition: border-color 0.15s ease;
+}
+
+.lens-stat-box:hover {
+    border-color: var(--lens-border-medium);
 }
 
 .lens-stat-number {
-    font-size: 1.75rem;
+    font-family: 'JetBrains Mono', 'Inter', monospace;
+    font-size: 1.85rem;
     font-weight: 700;
     color: var(--lens-text-primary);
     line-height: 1.2;
@@ -156,32 +415,32 @@ code, pre, .lens-code {
 }
 
 .lens-stat-label {
-    font-size: 0.82rem;
-    font-weight: 500;
+    font-size: 0.80rem;
+    font-weight: 600;
     color: var(--lens-text-secondary);
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    margin-bottom: 4px;
+    margin-bottom: 6px;
 }
 
 .lens-stat-sub {
     font-size: 0.78rem;
     color: var(--lens-text-muted);
-    margin-top: 4px;
+    margin-top: 5px;
 }
 
 /* ==========================================================================
    Evidence Citation Panels
    ========================================================================== */
 .lens-citation-panel {
-    background: var(--lens-surface-card);
-    border-left: 3px solid var(--lens-accent-sky);
+    background: #111A2E;
+    border-left: 3px solid var(--lens-accent-teal-light);
     border-top: 1px solid var(--lens-border-subtle);
     border-right: 1px solid var(--lens-border-subtle);
     border-bottom: 1px solid var(--lens-border-subtle);
     border-radius: var(--lens-radius-sm);
-    padding: 14px 16px;
-    margin-bottom: 12px;
+    padding: 14px 18px;
+    margin-bottom: 14px;
 }
 
 .lens-citation-header {
@@ -189,213 +448,193 @@ code, pre, .lens-code {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 8px;
-    font-size: 0.85rem;
+    font-size: 0.84rem;
 }
 
 .lens-citation-badge {
-    background: #1E293B;
-    color: #38BDF8;
-    padding: 2px 8px;
-    border-radius: 4px;
+    background: #18253D;
+    color: var(--lens-accent-cyan);
+    padding: 3px 10px;
+    border-radius: var(--lens-radius-xs);
     font-family: 'JetBrains Mono', monospace;
     font-size: 0.78rem;
-    border: 1px solid #334155;
+    font-weight: 600;
+    border: 1px solid var(--lens-border-medium);
 }
 
 .lens-citation-quote {
     color: #CBD5E1;
     font-size: 0.92rem;
-    line-height: 1.55;
+    line-height: 1.6;
     margin: 0;
     font-style: italic;
-    background: rgba(0, 0, 0, 0.2);
-    padding: 8px 12px;
-    border-radius: 4px;
-    border-left: 2px solid #475569;
+    background: rgba(10, 15, 29, 0.45);
+    padding: 10px 14px;
+    border-radius: var(--lens-radius-xs);
+    border-left: 2px solid var(--lens-border-medium);
 }
 
 /* ==========================================================================
-   Badges, Pills & Status Indicators
+   Semantic Status Badges
    ========================================================================== */
 .lens-badge {
     display: inline-flex;
     align-items: center;
     gap: 4px;
-    padding: 3px 8px;
-    border-radius: 4px;
-    font-size: 0.78rem;
+    padding: 3px 9px;
+    border-radius: var(--lens-radius-xs);
+    font-size: 0.76rem;
     font-weight: 600;
-    letter-spacing: 0.02em;
+    letter-spacing: 0.03em;
     text-transform: uppercase;
 }
 
 .badge-success {
-    background: rgba(16, 185, 129, 0.15);
+    background: var(--lens-status-success-subtle);
     color: #34D399;
-    border: 1px solid rgba(16, 185, 129, 0.3);
+    border: 1px solid var(--lens-status-success-border);
 }
 
 .badge-warning {
-    background: rgba(245, 158, 11, 0.15);
+    background: var(--lens-status-warning-subtle);
     color: #FBBF24;
-    border: 1px solid rgba(245, 158, 11, 0.3);
+    border: 1px solid var(--lens-status-warning-border);
 }
 
 .badge-danger {
-    background: rgba(239, 68, 68, 0.15);
+    background: var(--lens-status-danger-subtle);
     color: #F87171;
-    border: 1px solid rgba(239, 68, 68, 0.3);
+    border: 1px solid var(--lens-status-danger-border);
 }
 
 .badge-info {
-    background: rgba(14, 165, 233, 0.15);
+    background: var(--lens-status-info-subtle);
     color: #38BDF8;
-    border: 1px solid rgba(14, 165, 233, 0.3);
+    border: 1px solid var(--lens-status-info-border);
+}
+
+.badge-violet {
+    background: var(--lens-accent-violet-subtle);
+    color: var(--lens-accent-violet-light);
+    border: 1px solid var(--lens-accent-violet-border);
 }
 
 .badge-neutral {
-    background: #1E293B;
+    background: #18243B;
     color: #94A3B8;
-    border: 1px solid #334155;
+    border: 1px solid var(--lens-border-medium);
 }
 
 .lens-tag {
     display: inline-block;
-    background: #1E293B;
+    background: #18243B;
     color: #E2E8F0;
-    border: 1px solid #334155;
-    padding: 3px 9px;
-    border-radius: 9999px;
+    border: 1px solid var(--lens-border-medium);
+    padding: 3px 10px;
+    border-radius: var(--lens-radius-pill);
     font-size: 0.82rem;
+    font-weight: 500;
     margin: 2px 4px 2px 0;
 }
 
 /* ==========================================================================
-   Editorial Callouts
+   Callouts & Summaries
    ========================================================================== */
 .tldr-card {
-    background: rgba(37, 99, 235, 0.08);
-    border-left: 4px solid var(--lens-accent-blue);
-    border-top: 1px solid rgba(37, 99, 235, 0.2);
-    border-right: 1px solid rgba(37, 99, 235, 0.2);
-    border-bottom: 1px solid rgba(37, 99, 235, 0.2);
-    padding: 14px 18px;
+    background: rgba(20, 184, 166, 0.08);
+    border-left: 4px solid var(--lens-accent-teal-light);
+    border-top: 1px solid var(--lens-accent-teal-border);
+    border-right: 1px solid var(--lens-accent-teal-border);
+    border-bottom: 1px solid var(--lens-accent-teal-border);
+    padding: 16px 20px;
     border-radius: var(--lens-radius-sm);
-    margin-bottom: 16px;
-    font-size: 0.95rem;
-    line-height: 1.55;
-}
-
-.exec-card {
-    background: rgba(16, 185, 129, 0.06);
-    border-left: 4px solid var(--lens-status-success);
-    border-top: 1px solid rgba(16, 185, 129, 0.2);
-    border-right: 1px solid rgba(16, 185, 129, 0.2);
-    border-bottom: 1px solid rgba(16, 185, 129, 0.2);
-    padding: 14px 18px;
-    border-radius: var(--lens-radius-sm);
-    margin-bottom: 16px;
+    margin-bottom: 18px;
     font-size: 0.95rem;
     line-height: 1.6;
 }
 
+.exec-card {
+    background: rgba(139, 92, 246, 0.07);
+    border-left: 4px solid var(--lens-accent-violet);
+    border-top: 1px solid var(--lens-accent-violet-border);
+    border-right: 1px solid var(--lens-accent-violet-border);
+    border-bottom: 1px solid var(--lens-accent-violet-border);
+    padding: 16px 20px;
+    border-radius: var(--lens-radius-sm);
+    margin-bottom: 18px;
+    font-size: 0.95rem;
+    line-height: 1.65;
+}
+
 .approval-gate-banner {
-    background: rgba(245, 158, 11, 0.08);
-    border: 1px solid rgba(245, 158, 11, 0.35);
+    background: var(--lens-status-warning-subtle);
+    border: 1px solid var(--lens-status-warning-border);
     border-left: 4px solid var(--lens-status-warning);
     border-radius: var(--lens-radius-sm);
     padding: 16px 20px;
-    margin: 16px 0;
+    margin: 18px 0;
 }
 
-/* Empty State Box */
+/* Empty State Widget */
 .lens-empty-state {
     text-align: center;
-    padding: 36px 20px;
+    padding: 40px 24px;
     background: var(--lens-surface-card);
-    border: 1px dashed var(--lens-border-subtle);
+    border: 1px dashed var(--lens-border-medium);
     border-radius: var(--lens-radius-md);
-    margin: 16px 0;
+    margin: 18px 0;
 }
 
 .lens-empty-icon {
-    font-size: 2.2rem;
-    margin-bottom: 12px;
-    opacity: 0.8;
+    font-size: 2.4rem;
+    margin-bottom: 14px;
+    opacity: 0.85;
 }
 
 .lens-empty-title {
-    font-size: 1.05rem;
-    font-weight: 600;
+    font-size: 1.1rem;
+    font-weight: 700;
     color: var(--lens-text-primary);
     margin-bottom: 6px;
 }
 
 .lens-empty-desc {
-    font-size: 0.88rem;
+    font-size: 0.90rem;
     color: var(--lens-text-secondary);
-    max-width: 480px;
+    max-width: 500px;
     margin: 0 auto;
-    line-height: 1.5;
-}
-
-/* Workflow Stage Progress Track */
-.lens-stage-track {
-    display: flex;
-    overflow-x: auto;
-    gap: 8px;
-    padding: 10px 0;
-    margin: 12px 0;
-}
-
-.lens-stage-step {
-    flex: 1;
-    min-width: 100px;
-    background: #1E293B;
-    border: 1px solid #334155;
-    border-radius: 4px;
-    padding: 8px;
-    font-size: 0.78rem;
-    text-align: center;
-    color: #94A3B8;
-}
-
-.lens-stage-step.active {
-    background: rgba(37, 99, 235, 0.2);
-    border-color: #3B82F6;
-    color: #F8FAFC;
-    font-weight: 600;
-}
-
-.lens-stage-step.completed {
-    background: rgba(16, 185, 129, 0.15);
-    border-color: #10B981;
-    color: #34D399;
+    line-height: 1.55;
 }
 
 /* ==========================================================================
-   Streamlit Component Fine-Tuning
+   Streamlit Component Fine-Tuning & Overrides
    ========================================================================== */
-/* Tab Navigation */
+/* Tabs */
 div[data-testid="stTabs"] button[role="tab"] {
     font-size: 0.92rem !important;
     font-weight: 500 !important;
     color: var(--lens-text-secondary) !important;
-    padding: 8px 16px !important;
+    padding: 9px 18px !important;
     border-radius: var(--lens-radius-sm) !important;
+    transition: all 0.15s ease !important;
 }
 
 div[data-testid="stTabs"] button[aria-selected="true"] {
-    color: #38BDF8 !important;
+    color: var(--lens-accent-teal-light) !important;
     font-weight: 600 !important;
-    background: rgba(56, 189, 248, 0.08) !important;
+    background: var(--lens-accent-teal-subtle) !important;
+    border-bottom: 2px solid var(--lens-accent-teal-light) !important;
 }
 
-/* Form Controls & Inputs */
+/* Inputs & Form Controls */
 div[data-baseweb="input"] {
     background-color: var(--lens-surface-primary) !important;
     border-color: var(--lens-border-subtle) !important;
     border-radius: var(--lens-radius-sm) !important;
+}
+
+div[data-baseweb="input"]:focus-within {
+    border-color: var(--lens-accent-teal-light) !important;
 }
 
 div[data-baseweb="select"] {
@@ -403,37 +642,91 @@ div[data-baseweb="select"] {
     border-color: var(--lens-border-subtle) !important;
 }
 
+/* Buttons */
+button[kind="primary"] {
+    background: linear-gradient(180deg, var(--lens-accent-teal-light) 0%, var(--lens-accent-teal) 100%) !important;
+    border: none !important;
+    color: #FFFFFF !important;
+    font-weight: 600 !important;
+    box-shadow: 0 2px 6px rgba(13, 148, 136, 0.3) !important;
+}
+
+button[kind="secondary"] {
+    background-color: #162238 !important;
+    border: 1px solid var(--lens-border-medium) !important;
+    color: #E2E8F0 !important;
+    font-weight: 500 !important;
+}
+
 /* File Uploader */
 div[data-testid="stFileUploader"] {
     background: var(--lens-surface-card);
     border: 1px dashed var(--lens-border-medium);
     border-radius: var(--lens-radius-md);
-    padding: 16px;
+    padding: 18px;
 }
 
-/* Streamlit Expander */
+/* Expander */
 div[data-testid="stExpander"] {
     background: var(--lens-surface-card);
     border: 1px solid var(--lens-border-subtle);
     border-radius: var(--lens-radius-sm);
-    margin-bottom: 10px;
+    margin-bottom: 12px;
 }
 
-/* Streamlit Dataframe */
+/* DataFrame */
 div[data-testid="stDataFrame"] {
     border: 1px solid var(--lens-border-subtle);
     border-radius: var(--lens-radius-sm);
 }
 
-/* Responsive adjustments */
+/* ==========================================================================
+   Responsive Multi-Device Layout (Desktop, Tablet, Mobile)
+   ========================================================================== */
+/* Tablet (max-width: 1024px) */
+@media (max-width: 1024px) {
+    .lens-hero {
+        padding: 32px 24px;
+    }
+    .lens-hero-title {
+        font-size: 1.95rem;
+    }
+    .lens-header {
+        padding: 18px 20px;
+    }
+    .lens-feature-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Mobile (max-width: 768px) */
 @media (max-width: 768px) {
+    .lens-hero {
+        padding: 24px 18px;
+    }
+    .lens-hero-title {
+        font-size: 1.55rem;
+    }
+    .lens-hero-desc {
+        font-size: 0.95rem;
+    }
     .lens-header {
         padding: 16px;
     }
     .lens-title {
         font-size: 1.45rem;
     }
+    .lens-feature-grid {
+        grid-template-columns: 1fr;
+    }
     .lens-stat-number {
-        font-size: 1.4rem;
+        font-size: 1.5rem;
+    }
+    .lens-stat-box {
+        padding: 14px 16px;
+    }
+    .lens-table th, .lens-table td {
+        padding: 10px 12px;
+        font-size: 0.82rem;
     }
 }

@@ -14,6 +14,7 @@ if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
 from app.components import (
+    inject_seo_metadata,
     render_comparison_view,
     render_dashboard_view,
     render_document_overview,
@@ -25,6 +26,7 @@ from app.components import (
     render_mlops_view,
     render_page_header,
     render_paper_intelligence_view,
+    render_public_landing_view,
     render_qa_view,
     render_research_automation_view,
     render_research_monitor_view,
@@ -70,8 +72,8 @@ logger = get_logger("app")
 
 # Page Configuration
 st.set_page_config(
-    page_title="ResearchLens — Scientific Intelligence Platform",
-    page_icon="📑",
+    page_title="ResearchLens — Scientific Literature Intelligence & Guided MLOps",
+    page_icon="🔬",
     layout="wide",
     initial_sidebar_state="expanded",
 )
@@ -128,42 +130,53 @@ if "indexed_filename" not in st.session_state:
 settings = get_settings()
 ws_store = WorkspaceStore()
 
-# Production Authentication Gate
-if settings.is_production and settings.api_secret_key:
-    if "authenticated" not in st.session_state:
-        st.session_state.authenticated = False
-
-    if not st.session_state.authenticated:
-        st.title("🔒 ResearchLens Secure Login")
-        st.info("Public production access is restricted. Enter your access token or API Secret Key to continue.")
-        auth_input = st.text_input("Access Key / API Secret Key", type="password")
-        if st.button("Authenticate", key="auth_btn"):
-            if auth_input == settings.api_secret_key:
-                st.session_state.authenticated = True
-                st.rerun()
-            else:
-                st.error("Invalid Secret Key. Access denied.")
-        st.stop()
+# Production Authentication State
+is_auth_required = bool(settings.is_production and settings.api_secret_key)
+if "authenticated" not in st.session_state:
+    st.session_state.authenticated = not is_auth_required
 
 # Sidebar: Navigation & Configuration
 with st.sidebar:
-    st.markdown("## 📑 ResearchLens")
+    st.markdown("## 🔬 ResearchLens")
     st.caption("Scientific Intelligence & MLOps Platform")
+
+    nav_options = [
+        "Product Tour & Capabilities",
+        "Research Overview",
+        "Paper Analysis & Intelligence",
+        "Literature & Cross-Paper Analysis",
+        "Collaborative Workspace",
+        "Experiments & MLOps",
+        "Research Automation",
+        "Architecture & Health",
+    ]
 
     nav_selection = st.radio(
         "Navigation",
-        [
-            "Research Overview",
-            "Paper Analysis & Intelligence",
-            "Literature & Cross-Paper Analysis",
-            "Collaborative Workspace",
-            "Experiments & MLOps",
-            "Research Automation",
-            "Architecture & Health",
-        ],
+        nav_options,
         index=0,
         key="app_nav_radio",
     )
+
+    # Production Authentication Expander
+    if is_auth_required:
+        st.markdown("---")
+        with st.expander("🔒 Workspace Authentication", expanded=not st.session_state.authenticated):
+            if st.session_state.authenticated:
+                st.success("✅ Researcher Session Active")
+                if st.button("Sign Out", key="sign_out_btn"):
+                    st.session_state.authenticated = False
+                    st.rerun()
+            else:
+                st.caption("Sign in to unlock private workspaces and compute execution.")
+                auth_input = st.text_input("API Secret Key", type="password", key="auth_sidebar_input")
+                if st.button("Authenticate", key="auth_sidebar_btn"):
+                    if auth_input == settings.api_secret_key:
+                        st.session_state.authenticated = True
+                        st.success("Authenticated successfully!")
+                        st.rerun()
+                    else:
+                        st.error("Invalid Secret Key.")
 
     st.markdown("---")
 
@@ -171,8 +184,8 @@ with st.sidebar:
     if st.session_state.current_document:
         st.markdown(
             f"""
-            <div style="background: rgba(16, 185, 129, 0.1); border-left: 3px solid #10B981; padding: 10px; border-radius: 4px; margin-bottom: 12px;">
-                <div style="font-size: 0.78rem; color: #34D399; font-weight: 600; text-transform: uppercase;">Indexed Paper</div>
+            <div style="background: rgba(20, 184, 166, 0.12); border-left: 3px solid #14B8A6; padding: 10px; border-radius: 4px; margin-bottom: 12px;">
+                <div style="font-size: 0.78rem; color: #2DD4BF; font-weight: 600; text-transform: uppercase;">Indexed Paper</div>
                 <div style="font-size: 0.85rem; color: #F8FAFC; font-weight: 500; word-break: break-all;">{st.session_state.indexed_filename}</div>
                 <div style="font-size: 0.75rem; color: #94A3B8; margin-top: 4px;">{len(st.session_state.current_document.chunks)} chunks · {st.session_state.current_document.page_count} pages</div>
             </div>
@@ -195,8 +208,37 @@ with st.sidebar:
         st.caption(f"**Compute Device:** `{str(get_device()).upper()}`")
 
 
+# Gate Protected Private Routes in Production
+if is_auth_required and not st.session_state.authenticated and nav_selection != "Product Tour & Capabilities":
+    inject_seo_metadata(page_type="landing", title_suffix="Secure Researcher Login")
+    st.markdown(
+        """
+        <div class="lens-charter-box" style="margin-top: 20px;">
+            <div class="lens-charter-title">🔒 Authenticated Research Workspace Access</div>
+            <p class="lens-charter-desc">
+                This route contains proprietary academic manuscripts, team hypotheses, or compute execution facilities.
+                Please authenticate using your authorized workspace access key or API Secret Key in the sidebar to continue.
+            </p>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+    auth_input = st.text_input("Enter API Secret Key / Access Token", type="password", key="auth_main_input")
+    if st.button("Unlock Research Workspace", type="primary", key="auth_main_btn"):
+        if auth_input == settings.api_secret_key:
+            st.session_state.authenticated = True
+            st.rerun()
+        else:
+            st.error("Invalid Secret Key. Access denied.")
+    st.stop()
+
+
 # Main Viewport Navigation Routing
-if nav_selection == "Research Overview":
+if nav_selection == "Product Tour & Capabilities":
+    render_public_landing_view(store=ws_store)
+
+elif nav_selection == "Research Overview":
+    inject_seo_metadata(page_type="workspace", title_suffix="Research Overview")
     render_dashboard_view(store=ws_store)
 
 elif nav_selection == "Paper Analysis & Intelligence":
@@ -434,6 +476,7 @@ elif nav_selection == "Architecture & Health":
     a_tabs = st.tabs([
         "📡 System Health & Diagnostics",
         "🏛️ Engine Architecture & Specifications",
+        "📑 SEO & Application Architecture Audit",
     ])
 
     with a_tabs[0]:
@@ -459,5 +502,41 @@ elif nav_selection == "Architecture & Health":
             - **Anti-Hallucination Guarantee:** If retrieved excerpts do not provide sufficient evidentiary support, the system explicitly refuses to answer.
             - **Decoupled Architecture:** Streamlit acts strictly as an orchestration layer; NLP, embeddings, indexing, and QA logic reside in testable modular libraries.
             - **Production Security:** Hardened non-root containerization, request-size limits (100MB), rate limiting (50r/s), TLS 1.2/1.3 termination, and token-masked logging.
+            """
+        )
+
+    with a_tabs[2]:
+        st.markdown(
+            """
+            ### 📑 SEO Audit & Platform Architecture Realities
+
+            #### 1. Architecture Context: Streamlit SPA Runtime
+            ResearchLens is engineered as a local-first Python scientific platform orchestrated through Streamlit.
+            Streamlit is a Single-Page Application (SPA) driven by an interactive WebSocket connection between the browser
+            and Python backend.
+
+            #### 2. Native & Injected SEO Capabilities (Implemented)
+            - **Browser Title & Favicon:** Set dynamically via `st.set_page_config` with canonical branding (`ResearchLens`).
+            - **DOM Metadata Injection:** Dynamic `<meta name="description">`, keywords, and canonical `<link>` tags.
+            - **Social Graph Sharing:** Standard Open Graph (`og:title`, `og:description`, `og:type`) and Twitter Cards.
+            - **Structured Data:** Embedded Schema.org `SoftwareApplication` JSON-LD for rich snippet discovery.
+            - **Strict Anti-Indexing Privacy:** Authenticated workspaces, uploaded papers, and experiment records inject
+              `<meta name="robots" content="noindex, nofollow, noarchive, nosnippet">` to strictly prevent exposure of proprietary findings.
+
+            #### 3. Reverse-Proxy Level SEO & Privacy (Nginx Layer)
+            - **`robots.txt`**: Served directly at `/robots.txt`, strictly disallowing crawler access to `/_stcore/`, `/mlflow/`,
+              `/api/`, `/workspace/`, `/experiments/`, and `/data/`.
+            - **`sitemap.xml`**: Canonical sitemap served directly at `/sitemap.xml` pointing to the public landing page.
+            - **`X-Robots-Tag`**: Header emitted on `/mlflow/` and private API endpoints (`noindex, nofollow`).
+
+            #### 4. Streamlit Limitations & Architectural Justification
+            - **Static Site Generation (SSG):** Streamlit does not pre-render static HTML at build time. Legacy search engine spiders
+              that cannot evaluate JavaScript cannot crawl inner pages. Modern search engines (Googlebot) execute JavaScript and render client DOM.
+            - **Multi-Route Path Routing:** Streamlit multiplexes UI views through a single root WebSocket endpoint rather than independent
+              static URL paths.
+            - **Architectural Justification:** A decoupled framework (e.g., Next.js with FastAPI backend) would add significant serialization
+              overhead, dual runtime maintenance, and vector synchronization friction. For an interactive AI/ML research workbench with
+              direct in-memory tensor models, the Streamlit + Nginx architecture provides the optimal balance of developer ergonomics,
+              computational performance, and local data sovereignty.
             """
         )

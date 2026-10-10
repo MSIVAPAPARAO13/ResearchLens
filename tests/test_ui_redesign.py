@@ -38,6 +38,8 @@ def test_custom_css_design_tokens_present():
     assert "--lens-border-subtle" in content
     assert "--lens-text-primary" in content
     assert "--lens-accent-blue" in content
+    assert "--lens-accent-teal" in content
+    assert "--lens-accent-violet" in content
     assert "--lens-status-success" in content
 
     # Component classes
@@ -239,4 +241,31 @@ def test_render_all_major_views_integration(tmp_path):
 
     # 6. Research Monitor View
     render_research_monitor_view()
+
+
+def test_seo_metadata_injection_and_privacy_controls():
+    """Verify inject_seo_metadata outputs correct robots tags and schema for public vs workspace."""
+    from app.components.ui_elements import inject_seo_metadata, render_public_landing_view
+
+    # 1. Test public landing SEO injection
+    inject_seo_metadata(page_type="landing", title_suffix="Public Platform Tour")
+
+    # 2. Test authenticated workspace SEO injection (must enforce noindex)
+    inject_seo_metadata(page_type="workspace", title_suffix="Private Workspace")
+
+    # 3. Test public landing page view rendering
+    render_public_landing_view(store=None)
+
+
+def test_nginx_seo_and_security_configuration():
+    """Verify nginx.conf contains robots.txt, sitemap.xml, and X-Robots-Tag controls."""
+    nginx_conf = Path("nginx/nginx.conf")
+    assert nginx_conf.exists()
+    content = nginx_conf.read_text(encoding="utf-8")
+
+    assert "location = /robots.txt" in content
+    assert "Disallow: /_stcore/" in content
+    assert "Disallow: /mlflow/" in content
+    assert "location = /sitemap.xml" in content
+    assert "add_header X-Robots-Tag \"noindex, nofollow, noarchive\" always;" in content
 

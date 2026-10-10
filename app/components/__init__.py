@@ -13,10 +13,12 @@ from app.components.monitoring_view import render_research_monitor_view
 from app.components.qa_view import render_qa_view
 from app.components.summary_view import render_document_overview, render_summary_view
 from app.components.ui_elements import (
+    inject_seo_metadata,
     render_approval_gate_banner,
     render_citation_panel,
     render_empty_state,
     render_page_header,
+    render_public_landing_view,
     render_stat_card,
 )
 from app.components.upload import render_upload_component
@@ -44,4 +46,6 @@ __all__ = [
     "render_empty_state",
     "render_citation_panel",
     "render_approval_gate_banner",
+    "inject_seo_metadata",
+    "render_public_landing_view",
 ]
